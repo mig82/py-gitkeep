@@ -19,7 +19,10 @@ def gitkeep(recursive, letgo, path):
 	click.echo("Path: %s" % path)
 
 	if(os.path.exists(path)):
-		write_gitkeep(path)
+		if(os.path.isdir(path)):
+			write_gitkeep(path)
+		else:
+			click.echo("Path is NOT a directory!")
 	else:
 		click.echo("Path does NOT exist!")
 
