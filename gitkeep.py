@@ -1,4 +1,5 @@
 import click
+import os
 import time
 
 @click.command()
@@ -17,11 +18,13 @@ def gitkeep(recursive, letgo, path):
 	click.echo('Let go: %r' % letgo)
 	click.echo('Path: %s' % path)
 
-	write_gitkeep()
+	if(os.path.exists(path)):
+		write_gitkeep(path)
+	else:
+		click.echo("Path does NOT exist!")
 
-
-def write_gitkeep():
-	file = open('.gitkeep', 'w')
+def write_gitkeep(path):
+	file = open(path + '.gitkeep', 'w')
 	file.write("Created %s\n" % time.strftime("%Y-%m-%d %H:%M:%S"))
 	file.write("By https://github.com/mig82/py-gitkeep\n\n")
 	file.write(".gitkeep files are a cool hack to push empty directories to Git.")
