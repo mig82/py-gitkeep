@@ -13,6 +13,3 @@ def gitkeep(recursive, letgo, path):
 	https://git.wiki.kernel.org/index.php/Git_FAQ#Can_I_add_empty_directories.3F"""
 
 	click.echo('Path: %s' % path)
-
-if __name__ == '__main__':
-	gitkeep()
