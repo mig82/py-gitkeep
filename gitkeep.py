@@ -16,6 +16,11 @@ def gitkeep(recursive, letgo, path):
 
 	click.echo("recursive: %r" % recursive)
 	click.echo("Let go: %r" % letgo)
+
+	# Add the path separator at the end of the path if missing.
+	if(path[-1] != "/"):
+		path = path + "/"
+
 	click.echo("Path: %s" % path)
 
 	if(os.path.exists(path)):
