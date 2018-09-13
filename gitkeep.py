@@ -5,17 +5,17 @@ import time
 @click.command()
 @click.option("--recursive", "-r", default=False, is_flag=True,
 	help="Add or remove the .gitkeep files recursively for all sub-directories in the specified path.")
-@click.option("--letgo", "-l", default=False, is_flag=True,
+@click.option("--let-go", "-l", default=False, is_flag=True,
 	help="Remove the .gitkeep files from the specified path.")
 @click.argument("path")
-def gitkeep(recursive, letgo, path):
+def gitkeep(recursive, let_go, path):
 	"""Add a .gitkeep file to a directory in order
 	to push them into a Git repo even if they"re empty.\n
 	Read more about why this is necessary at:
 	https://git.wiki.kernel.org/index.php/Git_FAQ#Can_I_add_empty_directories.3F"""
 
 	click.echo("recursive: %r" % recursive)
-	click.echo("Let go: %r" % letgo)
+	click.echo("Let go: %r" % let_go)
 
 	# Add the path separator at the end of the path if missing.
 	if(path[-1] != "/"):
@@ -25,7 +25,7 @@ def gitkeep(recursive, letgo, path):
 
 	if(os.path.exists(path)):
 		if(os.path.isdir(path)):
-			if(letgo):
+			if(let_go):
 				delete_gitkeep(path)
 			else:
 				write_gitkeep(path)
