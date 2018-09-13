@@ -25,7 +25,10 @@ def gitkeep(recursive, letgo, path):
 
 	if(os.path.exists(path)):
 		if(os.path.isdir(path)):
-			write_gitkeep(path)
+			if(letgo):
+				delete_gitkeep(path)
+			else:
+				write_gitkeep(path)
 		else:
 			click.echo("Path is NOT a directory!")
 	else:
@@ -37,3 +40,12 @@ def write_gitkeep(path):
 	file.write("By https://github.com/mig82/py-gitkeep\n\n")
 	file.write(".gitkeep files are a cool hack to push empty directories to Git.")
 	file.close()
+	click.echo("Created %s.gitkeep" % path)
+
+def delete_gitkeep(path):
+	gitkeep_path = path + ".gitkeep"
+	if(os.path.exists(gitkeep_path)):
+		os.remove(path + ".gitkeep")
+		click.echo("Removed %s.gitkeep" % path)
+	else:
+		click.echo("No .gitkeep found at %s" % path)
