@@ -10,7 +10,7 @@ import time
 @click.argument("path")
 def gitkeep(recursive, let_go, path):
 	"""Add a .gitkeep file to a directory in order
-	to push them into a Git repo even if they"re empty.\n
+	to push them into a Git repo even if they're empty.\n
 	Read more about why this is necessary at:
 	https://git.wiki.kernel.org/index.php/Git_FAQ#Can_I_add_empty_directories.3F"""
 
@@ -26,19 +26,28 @@ def gitkeep(recursive, let_go, path):
 	#Execute only if the given path is for an existing directory.
 	if(os.path.exists(path)):
 		if(os.path.isdir(path)):
-			walk_path(recursive, let_go, path)
+			content = get_gitkeep_content()
+			walk_path(recursive, let_go, path, content)
 		else:
 			click.echo("Path is NOT a directory!")
 	else:
 		click.echo("Path does NOT exist!")
 
-def walk_path(recursive, let_go, path):
+def get_gitkeep_content():
+	content = """.gitkeep
+	Created %s
+	By https://github.com/mig82/py-gitkeep
+	Note: .gitkeep files are a simple hack to push empty directories to Git.
+	""" % time.strftime("%Y-%m-%d %H:%M:%S")
+	return content
+
+def walk_path(recursive, let_go, path, content):
 
 	#Add or delete the .gitkeep file in the specified path.
 	if(let_go):
 		delete_gitkeep(path)
 	else:
-		write_gitkeep(path)
+		write_gitkeep(path, content)
 
 	#Add or delete the .gitkeep file recursively.
 	if(recursive):
@@ -50,14 +59,12 @@ def walk_path(recursive, let_go, path):
 				if(let_go):
 					delete_gitkeep(gitkeep_path)
 				else:
-					write_gitkeep(gitkeep_path)
+					write_gitkeep(gitkeep_path, content)
 
 
-def write_gitkeep(path):
+def write_gitkeep(path, content):
 	file = open(path + ".gitkeep", "w")
-	file.write("Created %s\n" % time.strftime("%Y-%m-%d %H:%M:%S"))
-	file.write("By https://github.com/mig82/py-gitkeep\n\n")
-	file.write(".gitkeep files are a cool hack to push empty directories to Git.")
+	file.write(content)
 	file.close()
 	click.echo("	Created %s.gitkeep" % path)
 
