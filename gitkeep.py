@@ -25,14 +25,32 @@ def gitkeep(recursive, let_go, path):
 
 	if(os.path.exists(path)):
 		if(os.path.isdir(path)):
-			if(let_go):
-				delete_gitkeep(path)
-			else:
-				write_gitkeep(path)
+			walk_path(recursive, let_go, path)
 		else:
 			click.echo("Path is NOT a directory!")
 	else:
 		click.echo("Path does NOT exist!")
+
+def walk_path(recursive, let_go, path):
+
+	#Add or delete the .gitkeep file in the specified path.
+	if(let_go):
+		delete_gitkeep(path)
+	else:
+		write_gitkeep(path)
+
+	#Add or delete the .gitkeep file recursively.
+	if(recursive):
+		for root, dirs, files in os.walk(path):
+			for dir in dirs:
+
+				gitkeep_path = os.path.join(root, dir) + "/"
+
+				if(let_go):
+					delete_gitkeep(gitkeep_path)
+				else:
+					write_gitkeep(gitkeep_path)
+
 
 def write_gitkeep(path):
 	file = open(path + ".gitkeep", "w")
