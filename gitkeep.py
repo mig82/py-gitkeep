@@ -4,11 +4,16 @@ import time
 
 @click.command()
 @click.option("--recursive", "-r", default=False, is_flag=True,
-	help="Add or remove the .gitkeep files recursively for all sub-directories in the specified path.")
+	help="Add or remove the .gitkeep files recursively for all sub-directories "
+	"in the specified path.")
 @click.option("--let-go", "-l", default=False, is_flag=True,
 	help="Remove the .gitkeep files from the specified path.")
+@click.option("--message", "-m",
+	help="A message to be included in the .gitkeep file, ideally used to "
+	"explain why it's important to push the specified directory to source "
+	"control even if it's empty.")
 @click.argument("path")
-def gitkeep(recursive, let_go, path):
+def gitkeep(recursive, let_go, message, path):
 	"""Add a .gitkeep file to a directory in order
 	to push them into a Git repo even if they're empty.\n
 	Read more about why this is necessary at:
@@ -26,19 +31,24 @@ def gitkeep(recursive, let_go, path):
 	#Execute only if the given path is for an existing directory.
 	if(os.path.exists(path)):
 		if(os.path.isdir(path)):
-			content = get_gitkeep_content()
+			content = get_gitkeep_content(message)
 			walk_path(recursive, let_go, path, content)
 		else:
 			click.echo("Path is NOT a directory!")
 	else:
 		click.echo("Path does NOT exist!")
 
-def get_gitkeep_content():
+def get_gitkeep_content(message):
 	content = """.gitkeep
 	Created %s
 	By https://github.com/mig82/py-gitkeep
-	Note: .gitkeep files are a simple hack to push empty directories to Git.
 	""" % time.strftime("%Y-%m-%d %H:%M:%S")
+
+	if(not message):
+		content += "Message: .gitkeep files are a simple hack to push empty directories to Git.\n"
+	else:
+		content += "Message: %s\n" % message
+
 	return content
 
 def walk_path(recursive, let_go, path, content):

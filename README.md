@@ -1,4 +1,4 @@
-#gitkeep
+# gitkeep
 
 Sometimes when working with Git you require the folder structure of your project
 to be part of your repository. Maybe because you want to underline the
@@ -30,6 +30,11 @@ install Cygwin.
 To create a `.gitkeep` file in a specific directory called 'foo':
 
     gitkeep path/to/foo
+
+To add a message to your `.gitkeep` file in order to let fellow developers why
+it's important to keep the specified directory in source control:
+
+	gitkeep path/to/foo -m "This is where we'll later add X stuff."
 
 To remove it:
 
