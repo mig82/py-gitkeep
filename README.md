@@ -54,7 +54,7 @@ all `.gitkeep` files recursively
 
 Gitkeep is powered by [Click](http://click.pocoo.org/6/).
 
-##Install for Development
+## Develop
 
 First prepare a virtual environment to install your local copy. From the root of
 your project run:
@@ -71,7 +71,15 @@ Notice the prompt of your shell has changed to show the active environment.
 
 Get Click installed in your virtual environment:
 
-    pip install Click
+    pip3 install Click
+
+To install gitkeep in your virtual environment:
+
+	pip3 install --editable .
+
+Then just try running gitkeep:
+
+	gitkeep --help
 
 To go back to the real world, run:
 
