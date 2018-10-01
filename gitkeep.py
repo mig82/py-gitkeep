@@ -8,12 +8,14 @@ import time
 	"in the specified path.")
 @click.option("--let-go", "-l", default=False, is_flag=True,
 	help="Remove the .gitkeep files from the specified path.")
+@click.option("--empty", "-e", default=False, is_flag=True,
+	help="Create empty .gitkeep files. This will ignore any message provided")
 @click.option("--message", "-m",
 	help="A message to be included in the .gitkeep file, ideally used to "
 	"explain why it's important to push the specified directory to source "
 	"control even if it's empty.")
 @click.argument("path")
-def gitkeep(recursive, let_go, message, path):
+def gitkeep(recursive, let_go, empty, message, path):
 	"""Add a .gitkeep file to a directory in order
 	to push them into a Git repo even if they're empty.\n
 	Read more about why this is necessary at:
@@ -21,6 +23,14 @@ def gitkeep(recursive, let_go, message, path):
 
 	click.echo("recursive: %r" % recursive)
 	click.echo("Let go: %r" % let_go)
+	click.echo("Empty: %r" % empty)
+	click.echo("Message: %s" % message)
+	click.echo("Path: %s" % path)
+
+	if(empty and message):
+		click.echo("# WARNING: You've specified a message but used the empty "
+		"(-e) flag. The message will be ignored and the .gitkeep files will "
+		"have no content.")
 
 	# Add the path separator at the end of the path if missing.
 	if(path[-1] != "/"):
@@ -31,23 +41,27 @@ def gitkeep(recursive, let_go, message, path):
 	#Execute only if the given path is for an existing directory.
 	if(os.path.exists(path)):
 		if(os.path.isdir(path)):
-			content = get_gitkeep_content(message)
+			content = get_gitkeep_content(empty, message)
 			walk_path(recursive, let_go, path, content)
 		else:
 			click.echo("Path is NOT a directory!")
 	else:
 		click.echo("Path does NOT exist!")
 
-def get_gitkeep_content(message):
-	content = """.gitkeep
-	Created %s
-	By https://github.com/mig82/py-gitkeep
-	""" % time.strftime("%Y-%m-%d %H:%M:%S")
+def get_gitkeep_content(empty, message):
 
-	if(not message):
-		content += "Message: .gitkeep files are a simple hack to push empty directories to Git.\n"
+	if(empty):
+		content = ""
 	else:
-		content += "Message: %s\n" % message
+		content = """.gitkeep
+		Created %s
+		By https://github.com/mig82/py-gitkeep
+		""" % time.strftime("%Y-%m-%d %H:%M:%S")
+
+		if(not message):
+			content += "Message: .gitkeep files are a simple hack to push empty directories to Git.\n"
+		else:
+			content += "Message: %s\n" % message
 
 	return content
 

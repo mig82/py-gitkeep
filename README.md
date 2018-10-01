@@ -1,16 +1,15 @@
 # gitkeep
 
-Sometimes when working with Git you require the folder structure of your project
-to be part of your repository. Maybe because you want to underline the
-importance of certain directories. Maybe some part of the logic depends on
-certain directories being there.
+Sometimes when working with Git you require empty folders to be part of your
+repository. Maybe because you want to underline the
+importance of certain directories for storing certain files in the future.
+Maybe some part of the logic depends on those directories being there.
 
-However, [Git is not currently capable of versioning directories](https://git.wiki.kernel.org/index.php/GitFaq#Can_I_add_empty_directories.3F).
-It only versions files. So if your directories are empty, they won't be versioned.
+However, because Git only versions files, it is [unable to add empty directories ](https://git.wiki.kernel.org/index.php/GitFaq#Can_I_add_empty_directories.3F).
 
-One well known hack to get around this problem is to create a dummy file inside
-the empty directories you wish to version, in order to force them into source
-control.
+One well known hack to get around this problem is to version dummy files inside
+the empty directories you wish to add to your repository, in order to force
+the directory into source control.
 
 Gitkeep is a tiny command line utility written in Python that makes it easy to
 use this hack, by creating `.gitkeep` files in the directories of your choosing.
@@ -31,29 +30,32 @@ To create a `.gitkeep` file in a specific directory called 'foo':
 
     gitkeep path/to/foo
 
-To add a message to your `.gitkeep` file in order to let fellow developers why
-it's important to keep the specified directory in source control:
+To add a message to your `.gitkeep` file in order to let fellow developers
+understand why it's important to keep the specified directory in source control
+you can use the `--message` or `-m` flag:
 
 	gitkeep path/to/foo -m "This is where we'll later add X stuff."
 
-To remove it:
+By default all `.gitkeep` files bear the date of creation, the URL to this
+project and a default message. The idea here is to help others maintaining your
+project in the future understand what these files are. However, if you'd prefer
+to create empty `.gitkeep` files you can do so with the `--empty` or `-e` flag:
+
+	gitkeep path/to/foo -e
+
+To remove a `.gitkeep` file from a specified path use the `--let-go` or `-l` flag:
 
 	gitkeep --let-go path/to/foo
 
-To create a `.gitkeep` file in a directory called 'foo' and all its
-sub-directories:
+To create `.gitkeep` files recursively in a path and all its sub-directories
+use the `--recursive` or `-r` flag:
 
     gitkeep --recursive path/to/foo
 
-To remove all `.gitkeep` files from a directory called 'foo' and all its
-sub-directories:
+To remove all `.gitkeep` files recursively from a path and all its
+sub-directories use a combination of the `-r` and `-l` flags above:
 
-    gitkeep --recursive --let-go path/to/foo
-
-There are also short-hand options that can be combined. Most notably to remove
-all `.gitkeep` files recursively
-
-	gitkeep -lr path/to/foo
+    gitkeep -lr path/to/foo
 
 # Implementation Notes
 
