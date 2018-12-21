@@ -14,29 +14,30 @@ import time
 	help="A message to be included in the .gitkeep file, ideally used to "
 	"explain why it's important to push the specified directory to source "
 	"control even if it's empty.")
+@click.option("--verbose", "-v", default=False, is_flag=True,
+	help="Print out everything.")
 @click.argument("path")
-def gitkeep(recursive, let_go, empty, message, path):
+def gitkeep(recursive, let_go, empty, message, verbose, path):
 	"""Add a .gitkeep file to a directory in order
 	to push them into a Git repo even if they're empty.\n
 	Read more about why this is necessary at:
 	https://git.wiki.kernel.org/index.php/Git_FAQ#Can_I_add_empty_directories.3F"""
 
-	click.echo("recursive: %r" % recursive)
-	click.echo("Let go: %r" % let_go)
-	click.echo("Empty: %r" % empty)
-	click.echo("Message: %s" % message)
-	click.echo("Path: %s" % path)
+	# Add the path separator at the end of the path if missing.
+	if(path[-1] != "/"):
+		path = path + "/"
+
+	if(verbose):
+		click.echo("recursive: %r" % recursive)
+		click.echo("Let go: %r" % let_go)
+		click.echo("Empty: %r" % empty)
+		click.echo("Message: %s" % message)
+		click.echo("Path: %s" % path)
 
 	if(empty and message):
 		click.echo("# WARNING: You've specified a message but used the empty "
 		"(-e) flag. The message will be ignored and the .gitkeep files will "
 		"have no content.")
-
-	# Add the path separator at the end of the path if missing.
-	if(path[-1] != "/"):
-		path = path + "/"
-
-	click.echo("Path: %s" % path)
 
 	#Execute only if the given path is for an existing directory.
 	if(os.path.exists(path)):
@@ -44,9 +45,9 @@ def gitkeep(recursive, let_go, empty, message, path):
 			content = get_gitkeep_content(empty, message)
 			walk_path(recursive, let_go, path, content)
 		else:
-			click.echo("Path is NOT a directory!")
+			click.echo("# ERROR: Path is NOT a directory!")
 	else:
-		click.echo("Path does NOT exist!")
+		click.echo("# ERROR: Path does NOT exist!")
 
 def get_gitkeep_content(empty, message):
 
