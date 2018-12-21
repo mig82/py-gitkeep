@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='gitkeep',
-    version='0.1',
+    version='1.0.0',
 	description="A tiny utility to force empty directories into a Git repo.",
 	long_description=long_description,
     long_description_content_type="text/markdown",
