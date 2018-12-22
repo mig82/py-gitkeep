@@ -24,6 +24,12 @@ path you wish to version, and then to manually delete any exceptions.
 Also, Windows users do not have the luxury of the Bash command line unless they
 install Cygwin.
 
+# Install
+
+If you already have Python installed, simply run:
+
+    pip3 install gitkeep2
+
 # Use
 
 To create a `.gitkeep` file in a specific directory called 'foo':
